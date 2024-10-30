@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokédex</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container text-center">
+        <img src="{% static 'images/pokemon_logo.png' %}" alt="Pokémon Logo" class="img-fluid my-4 pokemon-logo">
+        <h1 class="my-4 pokemon-list-title">Pokédex</h1>
+        <form method="GET" action="{% url 'pokemon-search' %}" class="form-inline mb-4 justify-content-center">
+            <input class="form-control mr-sm-2" type="search" placeholder="Buscar Pokémon" aria-label="Buscar" name="query">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+        </form>
+        <button class="btn btn-outline-primary mb-4" id="random-pokemon">Traer Pokémon al azar</button>
+        <button class="btn btn-outline-warning mb-4" id="surprise-me">¡Sorpréndeme!</button>
+        <div id="pokemon-list" class="row">
+            {% for pokemon in pokemons %}
+                <div class="col-md-3 col-sm-6">
+                    <div class="card mb-4 shadow-sm pokemon-card" data-toggle="modal" data-target="#pokemonModal" data-id="{{ pokemon.id }}">
+                        <img src="{{ pokemon.image_url }}" class="card-img-top" alt="{{ pokemon.name }}">
+                        <div class="pokemon-card-info">
+                            <h5 class="card-title">{{ pokemon.name }}</h5>
+                            <p class="pokemon-id">N.º {{ pokemon.id|stringformat:"03d" }}</p>
+                            <p class="card-text">
+                                {% for type in pokemon.types %}
+                                    <span class="type-badge type-{{ type }}">{{ type }}</span>
+                                {% endfor %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <nav>
+            <ul class="pagination justify-content-center">
+                {% if next %}
+                    <li class="page-item"><button class="btn btn-outline-success" id="load-more" data-next-page="{{ current_page|add:'1' }}">Ver más Pokémon</button></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="pokemonModal" tabindex="-1" aria-labelledby="pokemonModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pokemonModalLabel">Detalles del Pokémon</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="pokemon-detail-container">
+                        <div class="pokemon-detail-info">
+                            <h1 class="pokemon-id">N.º <span id="pokemon-id"></span></h1>
+                            <h2 class="pokemon-name-title" style="text-align: left;"><span id="pokemon-name"></span></h2>
+                            <p class="card-text">Tipos: <span id="pokemon-types"></span></p>
+                            <p class="card-text">Altura: <span id="pokemon-height"></span> dm</p>
+                            <p class="card-text">Peso: <span id="pokemon-weight"></span> hg</p>
+                            <p class="card-text">Habilidades: <span id="pokemon-abilities"></span></p>
+                        </div>
+                        <div class="pokemon-detail-img-container">
+                            <img id="pokemon-image" class="pokemon-detail-img" alt="Pokémon">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+</body>
+</html>

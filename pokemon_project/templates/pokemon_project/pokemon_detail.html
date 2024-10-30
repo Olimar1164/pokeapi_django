@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Detail</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container text-center">
+        <img src="{% static 'images/pokemon_logo.png' %}" alt="Pokémon Logo" class="img-fluid my-4 pokemon-logo">
+        <div class="pokemon-detail-container">
+            <div class="pokemon-detail-info">
+                <h1 class="pokemon-id">N.º {{ pokemon.id|stringformat:"03d" }}</h1>
+                <h2 class="pokemon-name-title" style="text-align: left;">{{ pokemon.name|capfirst }}</h2>
+                <p class="card-text">Tipos: 
+                    {% for type in types %}
+                        <span class="type-badge type-{{ type }}">{{ type }}</span>
+                    {% endfor %}
+                </p>
+                <p class="card-text">Altura: {{ pokemon.height }} dm</p>
+                <p class="card-text">Peso: {{ pokemon.weight }} hg</p>
+                <p class="card-text">Habilidades: {{ abilities|join:", " }}</p>
+                <a href="#" class="btn btn-primary" onclick="history.back()"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <div class="pokemon-detail-img-container">
+                <img src="{{ image_url }}" class="pokemon-detail-img" alt="{{ pokemon.name }}">
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/scripts.js' %}"></script>
+</body>
+</html>
